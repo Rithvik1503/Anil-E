@@ -1,0 +1,13 @@
+.hideScrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hideScrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari and Opera */
+}
+
+.scrollContainer {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+} 
