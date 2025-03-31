@@ -5,6 +5,13 @@ import { Users, Calendar, Mail, Building2, Award, Newspaper } from 'lucide-react
 import { motion, useAnimation } from 'framer-motion'
 import { getAdminStats } from '@/lib/database'
 
+interface StatsCardProps {
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+  description: string;
+}
+
 interface Stat {
   name: string
   value: number

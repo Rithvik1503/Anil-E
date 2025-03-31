@@ -12,6 +12,12 @@ type About = {
   image_url: string
 }
 
+interface FormData {
+  title: string;
+  description: string;
+  image_url?: string;
+}
+
 export default function AboutPage() {
   const [about, setAbout] = useState<About | null>(null)
   const [loading, setLoading] = useState(true)
@@ -77,7 +83,7 @@ export default function AboutPage() {
     }
   }
 
-  const uploadImage = async (file: File): Promise<string> => {
+  const handleImageUpload = async (file: unknown): Promise<string> => {
     const fileExt = file.name.split('.').pop()
     const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
     const filePath = `about/${fileName}`
@@ -97,7 +103,7 @@ export default function AboutPage() {
     return publicUrl
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (data: FormData) => {
     e.preventDefault()
     if (!about) return
 
@@ -108,7 +114,7 @@ export default function AboutPage() {
       if (imageFile) {
         setUploading(true)
         try {
-          imageUrl = await uploadImage(imageFile)
+          imageUrl = await handleImageUpload(imageFile)
         } catch (error: any) {
           console.error('Error uploading image:', error)
           setError('Failed to upload image')
@@ -136,6 +142,10 @@ export default function AboutPage() {
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleError = (error: Error) => {
+    // Implementation of handleError function
   }
 
   if (loading) {

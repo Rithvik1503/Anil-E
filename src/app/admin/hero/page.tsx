@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import Image from 'next/image'
 
 type Hero = {
   id: string
@@ -183,13 +184,13 @@ export default function HeroPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700">Hero Image</label>
             <div className="mt-1 flex items-center space-x-4">
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="h-32 w-48 object-cover rounded"
-                />
-              )}
+              <Image
+                src={imagePreview || '/placeholder.jpg'}
+                alt="Preview"
+                width={200}
+                height={150}
+                className="object-cover rounded-lg"
+              />
               <input
                 type="file"
                 accept="image/*"

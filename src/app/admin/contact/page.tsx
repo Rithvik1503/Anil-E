@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
 import { Check, X, Mail, Phone, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { getMessages, updateMessageStatus } from '@/lib/database';
+import type { Message } from '@/types/database';
 
 type ContactMessage = {
   id: string;
@@ -22,7 +24,7 @@ export default function ContactMessagesPage() {
 
   useEffect(() => {
     fetchMessages();
-  }, [filter]);
+  }, [fetchMessages]);
 
   const fetchMessages = async () => {
     try {

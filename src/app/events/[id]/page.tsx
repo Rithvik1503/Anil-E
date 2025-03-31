@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import type { Event } from '@/types/database'
@@ -23,10 +24,12 @@ export default async function EventPage({
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Event Image */}
           <div className="aspect-w-16 aspect-h-9">
-            <img
+            <Image
               src={event.image_url}
               alt={event.title}
-              className="object-cover w-full h-full"
+              width={800}
+              height={400}
+              className="object-cover rounded-lg"
             />
           </div>
 

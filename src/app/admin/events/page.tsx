@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Event } from '@/types/database'
+import Image from 'next/image'
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([])
@@ -216,10 +217,12 @@ export default function EventsPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-4">
-                      <img
-                        src={event.image_url}
+                      <Image
+                        src={event.image_url || '/placeholder.jpg'}
                         alt={event.title}
-                        className="h-16 w-16 object-cover rounded"
+                        width={200}
+                        height={150}
+                        className="object-cover rounded-lg"
                       />
                       <div>
                         <p className="text-sm font-medium text-blue-600 truncate">
@@ -303,13 +306,13 @@ export default function EventsPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Event Image</label>
                 <div className="mt-1 flex items-center space-x-4">
-                  {imagePreview && (
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="h-32 w-32 object-cover rounded"
-                    />
-                  )}
+                  <Image
+                    src={imagePreview || '/placeholder.jpg'}
+                    alt="Preview"
+                    width={200}
+                    height={150}
+                    className="object-cover rounded-lg"
+                  />
                   <input
                     type="file"
                     accept="image/*"
