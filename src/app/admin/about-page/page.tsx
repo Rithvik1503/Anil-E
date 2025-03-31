@@ -8,7 +8,15 @@ import { getAboutPage, getKeyMissions, getTimelineEvents, updateAboutPage, creat
 import type { AboutPage, KeyMission, TimelineEvent } from '@/types/database'
 
 export default function AboutPageAdmin() {
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState<AboutPage>({
+    title: '',
+    description: '',
+    biography: '',
+    biography_image: '',
+  })
   const [aboutPage, setAboutPage] = useState<AboutPage | null>(null)
   const [keyMissions, setKeyMissions] = useState<KeyMission[]>([])
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([])
@@ -31,7 +39,7 @@ export default function AboutPageAdmin() {
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -163,7 +171,7 @@ export default function AboutPageAdmin() {
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>

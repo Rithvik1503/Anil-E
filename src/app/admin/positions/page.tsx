@@ -18,6 +18,8 @@ export default function PositionsPage() {
     is_current: false,
     description: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   useEffect(() => {
     fetchPositions()
@@ -42,71 +44,31 @@ export default function PositionsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
     try {
-      // Validate required fields
-      if (!formData.title || !formData.organization || !formData.start_date || !formData.description) {
-        setError('Please fill in all required fields')
-        return
-      }
-
-      // Validate dates
-      const startDate = new Date(formData.start_date)
-      const endDate = formData.end_date ? new Date(formData.end_date) : null
-      
-      if (endDate && endDate < startDate) {
-        setError('End date cannot be before start date')
-        return
-      }
-
       if (editingPosition) {
-        const { data, error } = await supabase
-          .from('positions')
-          .update({
-            ...formData,
-            end_date: formData.end_date || null // Convert empty string to null
-          })
-          .eq('id', editingPosition.id)
-          .select()
-
-        if (error) {
-          console.error('Update error:', error)
-          throw error
-        }
+        await updatePosition(editingPosition.id, formData)
+        setSuccessMessage('Position updated successfully')
       } else {
-        const { data, error } = await supabase
-          .from('positions')
-          .insert([{
-            ...formData,
-            end_date: formData.end_date || null // Convert empty string to null
-          }])
-          .select()
-
-        if (error) {
-          console.error('Insert error:', error)
-          throw error
-        }
+        await createPosition(formData)
+        setSuccessMessage('Position added successfully')
       }
-
       setIsModalOpen(false)
-      setEditingPosition(null)
       setFormData({
         title: '',
         organization: '',
         start_date: '',
         end_date: '',
         is_current: false,
-        description: ''
       })
       fetchPositions()
-      setError('Position saved successfully!')
-    } catch (error: any) {
-      console.error('Error saving position:', {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code
-      })
-      setError(error.message || 'Failed to save position')
+    } catch (error) {
+      setError('Failed to save position')
+      console.error('Error saving position:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -118,7 +80,6 @@ export default function PositionsPage() {
       start_date: position.start_date,
       end_date: position.end_date || '',
       is_current: position.is_current,
-      description: position.description
     })
     setIsModalOpen(true)
   }
@@ -126,32 +87,34 @@ export default function PositionsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this position?')) return
 
-    try {
-      const { error } = await supabase
-        .from('positions')
-        .delete()
-        .eq('id', id)
+    setIsLoading(true)
+    setError(null)
 
-      if (error) throw error
+    try {
+      await deletePosition(id)
+      setSuccessMessage('Position deleted successfully')
       fetchPositions()
     } catch (error) {
-      console.error('Error deleting position:', error)
       setError('Failed to delete position')
+      console.error('Error deleting position:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleToggleCurrent = async (position: Position) => {
-    try {
-      const { error } = await supabase
-        .from('positions')
-        .update({ is_current: !position.is_current })
-        .eq('id', position.id)
+  const handleToggleCurrent = async (id: string, current: boolean) => {
+    setIsLoading(true)
+    setError(null)
 
-      if (error) throw error
+    try {
+      await updatePosition(id, { is_current: !current })
+      setSuccessMessage('Position status updated successfully')
       fetchPositions()
     } catch (error) {
-      console.error('Error toggling current status:', error)
-      setError('Failed to update current status')
+      setError('Failed to update position status')
+      console.error('Error updating position status:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -196,6 +159,12 @@ export default function PositionsPage() {
         </div>
       )}
 
+      {successMessage && (
+        <div className={`p-4 rounded-md bg-green-50 text-green-700 border border-green-200`}>
+          {successMessage}
+        </div>
+      )}
+
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
           {positions.map((position) => (
@@ -216,7 +185,7 @@ export default function PositionsPage() {
                   </div>
                   <div className="ml-4 flex-shrink-0 flex space-x-2">
                     <button
-                      onClick={() => handleToggleCurrent(position)}
+                      onClick={() => handleToggleCurrent(position.id, position.is_current)}
                       className={`px-3 py-1 rounded-full text-sm ${
                         position.is_current
                           ? 'bg-green-100 text-green-800'

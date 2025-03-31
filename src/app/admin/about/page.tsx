@@ -21,7 +21,7 @@ export default function ContactMessagesPage() {
 
   useEffect(() => {
     fetchMessages()
-  }, [filter])
+  }, [fetchMessages])
 
   const fetchMessages = async () => {
     try {
