@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
-import type { Event } from '@/types/database'
 
 export default async function EventPage({
   params,
