@@ -1,16 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { Calendar, Trash2, Plus, Upload, Save } from 'lucide-react'
+import { Calendar, Trash2, Plus, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getAboutPage, getKeyMissions, getTimelineEvents, updateAboutPage, createKeyMission, updateKeyMission, deleteKeyMission, createTimelineEvent, updateTimelineEvent, deleteTimelineEvent } from '@/lib/database'
 import type { AboutPage, KeyMission, TimelineEvent } from '@/types/database'
 
 export default function AboutPageAdmin() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [aboutPage, setAboutPage] = useState<AboutPage | null>(null)
   const [keyMissions, setKeyMissions] = useState<KeyMission[]>([])
@@ -18,16 +15,8 @@ export default function AboutPageAdmin() {
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        router.push('/login')
-      }
-      fetchData()
-    }
-
-    checkUser()
-  }, [router])
+    fetchData()
+  }, [])
 
   const fetchData = async () => {
     try {
