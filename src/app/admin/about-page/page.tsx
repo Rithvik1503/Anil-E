@@ -1,12 +1,11 @@
 'use client'
 
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Calendar, Trash2, Plus, Upload, Save } from 'lucide-react'
-import { supabase } from '@/lib/database'
+import { supabase } from '@/lib/supabase'
 import { getAboutPage, getKeyMissions, getTimelineEvents, updateAboutPage, createKeyMission, updateKeyMission, deleteKeyMission, createTimelineEvent, updateTimelineEvent, deleteTimelineEvent } from '@/lib/database'
 import type { AboutPage, KeyMission, TimelineEvent } from '@/types/database'
 
