@@ -22,7 +22,8 @@
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sonner": "^2.0.2"
+    "sonner": "^2.0.2",
+    "vercel": "^41.6.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
