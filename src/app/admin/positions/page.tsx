@@ -38,10 +38,17 @@ export default function PositionsPage() {
     setError(null)
 
     try {
-      if (isEditing) {
-        await updatePosition(formData.id, formData)
+      if (isEditing && formData.id) {
+        const { error } = await supabase
+          .from('positions')
+          .update(formData)
+          .eq('id', formData.id)
+        if (error) throw error
       } else {
-        await createPosition(formData)
+        const { error } = await supabase
+          .from('positions')
+          .insert([formData])
+        if (error) throw error
       }
       setIsModalOpen(false)
       setFormData({})
@@ -72,7 +79,11 @@ export default function PositionsPage() {
     setError(null)
 
     try {
-      await deletePosition(id)
+      const { error } = await supabase
+        .from('positions')
+        .delete()
+        .eq('id', id)
+      if (error) throw error
       fetchPositions()
     } catch (error) {
       setError('Failed to delete position')
@@ -84,7 +95,11 @@ export default function PositionsPage() {
     setError(null)
 
     try {
-      await updatePosition(id, { is_current: !current })
+      const { error } = await supabase
+        .from('positions')
+        .update({ is_current: !current })
+        .eq('id', id)
+      if (error) throw error
       fetchPositions()
     } catch (error) {
       setError('Failed to update position status')
