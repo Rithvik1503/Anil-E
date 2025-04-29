@@ -66,7 +66,7 @@ export default function PositionsPage() {
       title: position.title,
       organization: position.organization,
       start_date: position.start_date,
-      end_date: position.end_date || '',
+      end_date: position.end_date || undefined,
       is_current: position.is_current,
       description: position.description
     })
