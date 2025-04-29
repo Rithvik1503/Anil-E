@@ -1,47 +1,38 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { Calendar, Trash2, Plus, Save } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Trash2, Plus, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getAboutPage, getKeyMissions, getTimelineEvents, updateAboutPage, createKeyMission, updateKeyMission, deleteKeyMission, createTimelineEvent, updateTimelineEvent, deleteTimelineEvent } from '@/lib/database'
 import type { AboutPage, KeyMission, TimelineEvent } from '@/types/database'
 
 export default function AboutPageAdmin() {
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [formData, setFormData] = useState<AboutPage>({
-    title: '',
-    description: '',
-    biography: '',
-    biography_image: '',
-  })
+  const [uploading, setUploading] = useState(false)
   const [aboutPage, setAboutPage] = useState<AboutPage | null>(null)
   const [keyMissions, setKeyMissions] = useState<KeyMission[]>([])
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([])
-  const [uploading, setUploading] = useState(false)
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   const fetchData = async () => {
     try {
-      const [aboutData, missionsData, timelineData] = await Promise.all([
+      const [aboutData, missionsData, eventsData] = await Promise.all([
         getAboutPage(),
         getKeyMissions(),
         getTimelineEvents()
       ])
       setAboutPage(aboutData)
       setKeyMissions(missionsData)
-      setTimelineEvents(timelineData)
+      setTimelineEvents(eventsData)
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const handleImageUpload = async (file: File, type: 'biography' | 'mission' | 'timeline') => {
     try {
