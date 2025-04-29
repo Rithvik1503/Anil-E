@@ -16,12 +16,12 @@ type ContactMessage = {
 
 export default function ContactMessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([])
-  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'new' | 'read' | 'replied'>('all')
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchMessages = useCallback(async () => {
     try {
-      setLoading(true)
+      setIsLoading(true)
       let query = supabase
         .from('contact_submission')
         .select('*')
@@ -38,7 +38,7 @@ export default function ContactMessagesPage() {
     } catch (error) {
       console.error('Error fetching messages:', error)
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }, [filter])
 
@@ -60,7 +60,7 @@ export default function ContactMessagesPage() {
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>

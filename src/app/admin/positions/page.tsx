@@ -1,25 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Trash2, Plus, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { Position } from '@/types/database'
 
 export default function PositionsPage() {
   const [positions, setPositions] = useState<Position[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingPosition, setEditingPosition] = useState<Position | null>(null)
-  const [formData, setFormData] = useState({
-    title: '',
-    organization: '',
-    start_date: '',
-    end_date: '',
-    is_current: false,
-    description: ''
-  })
-  const [isLoading, setIsLoading] = useState(false)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Partial<Position>>({})
+  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
     fetchPositions()
@@ -44,42 +36,33 @@ export default function PositionsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError(null)
 
     try {
-      if (editingPosition) {
-        await updatePosition(editingPosition.id, formData)
-        setSuccessMessage('Position updated successfully')
+      if (isEditing) {
+        await updatePosition(formData.id, formData)
       } else {
         await createPosition(formData)
-        setSuccessMessage('Position added successfully')
       }
       setIsModalOpen(false)
-      setFormData({
-        title: '',
-        organization: '',
-        start_date: '',
-        end_date: '',
-        is_current: false,
-      })
+      setFormData({})
       fetchPositions()
     } catch (error) {
       setError('Failed to save position')
       console.error('Error saving position:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   const handleEdit = (position: Position) => {
-    setEditingPosition(position)
+    setIsEditing(true)
     setFormData({
+      id: position.id,
       title: position.title,
       organization: position.organization,
       start_date: position.start_date,
       end_date: position.end_date || '',
       is_current: position.is_current,
+      description: position.description
     })
     setIsModalOpen(true)
   }
@@ -87,34 +70,26 @@ export default function PositionsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this position?')) return
 
-    setIsLoading(true)
     setError(null)
 
     try {
       await deletePosition(id)
-      setSuccessMessage('Position deleted successfully')
       fetchPositions()
     } catch (error) {
       setError('Failed to delete position')
       console.error('Error deleting position:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   const handleToggleCurrent = async (id: string, current: boolean) => {
-    setIsLoading(true)
     setError(null)
 
     try {
       await updatePosition(id, { is_current: !current })
-      setSuccessMessage('Position status updated successfully')
       fetchPositions()
     } catch (error) {
       setError('Failed to update position status')
       console.error('Error updating position status:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -132,15 +107,8 @@ export default function PositionsPage() {
         <h1 className="text-2xl font-semibold text-gray-900">Positions Management</h1>
         <button
           onClick={() => {
-            setEditingPosition(null)
-            setFormData({
-              title: '',
-              organization: '',
-              start_date: '',
-              end_date: '',
-              is_current: false,
-              description: ''
-            })
+            setIsEditing(false)
+            setFormData({})
             setIsModalOpen(true)
           }}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -156,12 +124,6 @@ export default function PositionsPage() {
             : 'bg-red-50 text-red-700 border border-red-200'
         }`}>
           {error}
-        </div>
-      )}
-
-      {successMessage && (
-        <div className={`p-4 rounded-md bg-green-50 text-green-700 border border-green-200`}>
-          {successMessage}
         </div>
       )}
 
@@ -219,7 +181,7 @@ export default function PositionsPage() {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full p-6">
             <h2 className="text-xl font-semibold mb-4">
-              {editingPosition ? 'Edit Position' : 'Add New Position'}
+              {isEditing ? 'Edit Position' : 'Add New Position'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -299,7 +261,7 @@ export default function PositionsPage() {
                   type="submit"
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
                 >
-                  {editingPosition ? 'Update' : 'Create'}
+                  {isEditing ? 'Update' : 'Create'}
                 </button>
               </div>
             </form>
