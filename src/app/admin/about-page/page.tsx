@@ -8,7 +8,6 @@ import type { AboutPage, KeyMission, TimelineEvent } from '@/types/database'
 
 export default function AboutPageAdmin() {
   const [isLoading, setIsLoading] = useState(true)
-  const [uploading, setUploading] = useState(false)
   const [aboutPage, setAboutPage] = useState<AboutPage | null>(null)
   const [keyMissions, setKeyMissions] = useState<KeyMission[]>([])
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([])
@@ -36,7 +35,6 @@ export default function AboutPageAdmin() {
 
   const handleImageUpload = async (file: File, type: 'biography' | 'mission' | 'timeline') => {
     try {
-      setUploading(true)
       const fileExt = file.name.split('.').pop()
       const fileName = `${type}-${Date.now()}.${fileExt}`
       const filePath = `${type}/${fileName}`
@@ -55,8 +53,6 @@ export default function AboutPageAdmin() {
     } catch (error) {
       console.error('Error uploading image:', error)
       return null
-    } finally {
-      setUploading(false)
     }
   }
 

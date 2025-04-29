@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Trash2, Plus, Save } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { Position } from '@/types/database'
 
