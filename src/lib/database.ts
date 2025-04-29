@@ -77,13 +77,21 @@ export async function getAdminStats() {
     { count: messagesCount },
     { count: awardsCount },
     { count: newsCount },
-    { count: membersCount }
+    { count: membersCount },
+    { count: positionsCount },
+    { count: keyMissionsCount },
+    { count: timelineEventsCount },
+    { count: pendingMessagesCount }
   ] = await Promise.all([
     supabase.from('events').select('*', { count: 'exact', head: true }),
-    supabase.from('contact_messages').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_submission').select('*', { count: 'exact', head: true }),
     supabase.from('awards').select('*', { count: 'exact', head: true }),
     supabase.from('news').select('*', { count: 'exact', head: true }),
-    supabase.from('community_members').select('*', { count: 'exact', head: true })
+    supabase.from('community_members').select('*', { count: 'exact', head: true }),
+    supabase.from('positions').select('*', { count: 'exact', head: true }),
+    supabase.from('key_missions').select('*', { count: 'exact', head: true }),
+    supabase.from('timeline_events').select('*', { count: 'exact', head: true }),
+    supabase.from('contact_submission').select('*', { count: 'exact', head: true }).filter('status', 'eq', 'new')
   ])
 
   return {
@@ -91,7 +99,11 @@ export async function getAdminStats() {
     messages: messagesCount || 0,
     awards: awardsCount || 0,
     news: newsCount || 0,
-    members: membersCount || 0
+    members: membersCount || 0,
+    positions: positionsCount || 0,
+    keyMissions: keyMissionsCount || 0,
+    timelineEvents: timelineEventsCount || 0,
+    pendingMessages: pendingMessagesCount || 0
   }
 }
 

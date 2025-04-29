@@ -19,10 +19,6 @@ export default function ContactMessagesPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'new' | 'read' | 'replied'>('all')
 
-  useEffect(() => {
-    fetchMessages()
-  }, [fetchMessages])
-
   const fetchMessages = async () => {
     try {
       setLoading(true)
@@ -45,6 +41,10 @@ export default function ContactMessagesPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchMessages()
+  }, [fetchMessages])
 
   const updateMessageStatus = async (id: string, status: ContactMessage['status']) => {
     try {

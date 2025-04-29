@@ -4,9 +4,10 @@ import type { Event } from '@/types/database'
 
 interface ShareButtonsProps {
   event: Event
+  onClose?: () => void
 }
 
-export default function ShareButtons({ event }: ShareButtonsProps) {
+export default function ShareButtons({ event, onClose }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
   
   // Base URL for the website
@@ -27,7 +28,10 @@ export default function ShareButtons({ event }: ShareButtonsProps) {
     try {
       await navigator.clipboard.writeText(eventUrl)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setTimeout(() => {
+        setCopied(false)
+        onClose?.()
+      }, 2000)
     } catch (err) {
       console.error('Failed to copy:', err)
     }
@@ -36,24 +40,33 @@ export default function ShareButtons({ event }: ShareButtonsProps) {
   return (
     <div className="flex items-center space-x-4">
       <button
-        onClick={() => window.open(facebookUrl, '_blank')}
-        className="text-blue-600 hover:text-blue-800 transition-colors"
+        onClick={() => {
+          window.open(facebookUrl, '_blank')
+          onClose?.()
+        }}
+        className="text-blue-600 hover:text-blue-800"
         aria-label="Share on Facebook"
       >
         <Facebook className="h-5 w-5" />
       </button>
       
       <button
-        onClick={() => window.open(twitterUrl, '_blank')}
-        className="text-sky-500 hover:text-sky-700 transition-colors"
+        onClick={() => {
+          window.open(twitterUrl, '_blank')
+          onClose?.()
+        }}
+        className="text-sky-500 hover:text-sky-700"
         aria-label="Share on Twitter"
       >
         <Twitter className="h-5 w-5" />
       </button>
       
       <button
-        onClick={() => window.open(linkedinUrl, '_blank')}
-        className="text-blue-700 hover:text-blue-900 transition-colors"
+        onClick={() => {
+          window.open(linkedinUrl, '_blank')
+          onClose?.()
+        }}
+        className="text-blue-700 hover:text-blue-900"
         aria-label="Share on LinkedIn"
       >
         <Linkedin className="h-5 w-5" />
@@ -61,7 +74,7 @@ export default function ShareButtons({ event }: ShareButtonsProps) {
       
       <button
         onClick={copyToClipboard}
-        className="text-gray-600 hover:text-gray-800 transition-colors relative"
+        className="text-gray-600 hover:text-gray-800 relative"
         aria-label="Copy link"
       >
         <LinkIcon className="h-5 w-5" />

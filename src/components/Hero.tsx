@@ -1,8 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import SocialSidebar from './SocialSidebar'
 
 interface HeroProps {
   title?: string
@@ -21,6 +21,7 @@ export default function Hero({
 }: HeroProps) {
   return (
     <div className="relative bg-gray-900">
+      <SocialSidebar />
       <div className="relative aspect-[16/9] w-full">
         <Image
           className="object-cover"
@@ -31,52 +32,30 @@ export default function Hero({
           sizes="100vw"
           quality={100}
         />
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
       </div>
-      <div className="absolute inset-0 flex items-center">
+      <div className="absolute inset-0 flex items-end pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
-            <motion.h1 
-              className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.2] uppercase"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-[1.2] uppercase">
               &quot;{title}&quot;
-            </motion.h1>
-            <motion.div 
-              className="mt-3 sm:mt-4 md:mt-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
+            </h1>
+            <div className="mt-3 sm:mt-4 md:mt-6">
               <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-white/90 font-light tracking-wide">
                 {subtitle}
               </p>
-            </motion.div>
-            <motion.div 
-              className="mt-4 sm:mt-6 md:mt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
+            </div>
+            <div className="mt-4 sm:mt-6 md:mt-8">
               <Link
                 href={buttonLink}
-                className="inline-flex items-center px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 border-2 border-white/20 text-sm sm:text-base font-medium rounded-lg text-white hover:bg-white/10 transition-colors duration-300"
+                className="inline-flex items-center px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 border-2 border-white/20 text-sm sm:text-base font-medium rounded-lg text-white hover:bg-white/10"
               >
                 {buttonText}
-                <motion.svg
+                <svg
                   className="ml-2 h-3 w-3 sm:h-4 sm:w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
                 >
                   <path
                     strokeLinecap="round"
@@ -84,9 +63,9 @@ export default function Hero({
                     strokeWidth={2}
                     d="M14 5l7 7m0 0l-7 7m7-7H3"
                   />
-                </motion.svg>
+                </svg>
               </Link>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

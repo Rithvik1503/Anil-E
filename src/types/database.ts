@@ -10,6 +10,17 @@ export type Event = {
   location?: string
 }
 
+export type HeroSection = {
+  id: string
+  title: string
+  subtitle: string
+  button_text: string
+  button_link: string
+  image_url: string
+  created_at: string
+  updated_at: string
+}
+
 export type ContactSubmission = {
   id: string
   name: string

@@ -73,12 +73,9 @@ export default function Footer() {
       {/* Footer Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* About Section */}
+          {/* About Section (only social icons) */}
           <div>
             <h3 className="text-2xl font-bold mb-6">Anil Eravathri</h3>
-            <p className="text-gray-300 mb-6">
-              Working towards a better and brighter future for our community through dedicated public service and innovative initiatives.
-            </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
                 <motion.a
@@ -92,21 +89,6 @@ export default function Footer() {
                 </motion.a>
               ))}
             </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-xl font-semibold mb-6">Quick Links</h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <Link href={link.href} className="flex items-center text-gray-300 hover:text-white transition-colors group">
-                    <ChevronRight className="h-4 w-4 mr-2 transform group-hover:translate-x-1 transition-transform" />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Contact Info */}

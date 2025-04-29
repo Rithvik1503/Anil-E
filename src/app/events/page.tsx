@@ -12,9 +12,9 @@ export default async function EventsPage({
   const { events, totalPages } = await getEvents(currentPage)
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 sm:py-16">
+    <main className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900 to-[#0B1C39] px-6 py-24 sm:py-32 lg:px-8">
+      <div className="relative isolate overflow-hidden bg-gradient-to-b from-blue-900 to-[#0B1C39] px-6 py-16 sm:py-24 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
             Events & Updates
@@ -26,7 +26,7 @@ export default async function EventsPage({
       </div>
 
       {/* Events Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {events.map((event) => (
             <EventCard key={event.id} event={event} />

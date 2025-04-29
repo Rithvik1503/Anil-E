@@ -1,7 +1,12 @@
+import { redirect } from 'next/navigation'
 import AdminStats from '@/components/AdminStats'
 import RecentActivity from '@/components/RecentActivity'
 
-export default function AdminDashboard() {
+export default function AdminPage() {
+  redirect('/admin/dashboard')
+}
+
+export function AdminDashboard() {
   return (
     <div className="py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

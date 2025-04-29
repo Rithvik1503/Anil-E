@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import AdminStats from '@/components/AdminStats'
+import RecentActivity from '@/components/RecentActivity'
 
 export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
@@ -55,11 +57,16 @@ export default function AdminDashboard() {
             </button>
           </div>
 
-          <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Welcome to the Admin Dashboard</h2>
-            <p className="text-gray-600">
-              This is your admin dashboard where you can manage your website content.
-            </p>
+          {/* Stats Section */}
+          <div className="mb-8">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Overview</h2>
+            <AdminStats />
+          </div>
+
+          {/* Recent Activity Section */}
+          <div className="mb-8">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Recent Activity</h2>
+            <RecentActivity />
           </div>
         </div>
       </div>

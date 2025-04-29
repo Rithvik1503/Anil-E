@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Users, Calendar, Mail, Building2, Award, Newspaper, LucideIcon } from 'lucide-react'
+import { Calendar, Mail, LucideIcon, Briefcase, ListChecks, Clock } from 'lucide-react'
 import { motion, useAnimation } from 'framer-motion'
 import { getAdminStats } from '@/lib/database'
 
@@ -16,10 +16,10 @@ export default function AdminStats() {
   const [stats, setStats] = useState<Stat[]>([
     { name: 'Total Events', value: 0, icon: Calendar, color: 'blue' },
     { name: 'Contact Messages', value: 0, icon: Mail, color: 'green' },
-    { name: 'Government Portals', value: 2, icon: Building2, color: 'purple' },
-    { name: 'Awards & Recognition', value: 0, icon: Award, color: 'yellow' },
-    { name: 'News Articles', value: 0, icon: Newspaper, color: 'red' },
-    { name: 'Community Members', value: 0, icon: Users, color: 'indigo' },
+    { name: 'Pending Messages', value: 0, icon: Clock, color: 'orange' },
+    { name: 'Positions', value: 0, icon: Briefcase, color: 'gray' },
+    { name: 'Key Missions', value: 0, icon: ListChecks, color: 'teal' },
+    { name: 'Timeline Events', value: 0, icon: Clock, color: 'pink' },
   ])
 
   const controls = useAnimation()
@@ -28,22 +28,19 @@ export default function AdminStats() {
     const fetchStats = async () => {
       try {
         const data = await getAdminStats()
-        
         setStats([
           { name: 'Total Events', value: data.events, icon: Calendar, color: 'blue' },
           { name: 'Contact Messages', value: data.messages, icon: Mail, color: 'green' },
-          { name: 'Government Portals', value: 2, icon: Building2, color: 'purple' },
-          { name: 'Awards & Recognition', value: data.awards, icon: Award, color: 'yellow' },
-          { name: 'News Articles', value: data.news, icon: Newspaper, color: 'red' },
-          { name: 'Community Members', value: data.members, icon: Users, color: 'indigo' },
+          { name: 'Pending Messages', value: data.pendingMessages, icon: Clock, color: 'orange' },
+          { name: 'Positions', value: data.positions, icon: Briefcase, color: 'gray' },
+          { name: 'Key Missions', value: data.keyMissions, icon: ListChecks, color: 'teal' },
+          { name: 'Timeline Events', value: data.timelineEvents, icon: Clock, color: 'pink' },
         ])
-        
         await controls.start({ opacity: 1, y: 0 })
       } catch (error) {
         console.error('Error fetching admin stats:', error)
       }
     }
-
     fetchStats()
   }, [controls])
 
@@ -53,14 +50,14 @@ export default function AdminStats() {
         return 'bg-blue-50 text-blue-600'
       case 'green':
         return 'bg-green-50 text-green-600'
-      case 'purple':
-        return 'bg-purple-50 text-purple-600'
-      case 'yellow':
-        return 'bg-yellow-50 text-yellow-600'
-      case 'red':
-        return 'bg-red-50 text-red-600'
-      case 'indigo':
-        return 'bg-indigo-50 text-indigo-600'
+      case 'gray':
+        return 'bg-gray-50 text-gray-600'
+      case 'teal':
+        return 'bg-teal-50 text-teal-600'
+      case 'pink':
+        return 'bg-pink-50 text-pink-600'
+      case 'orange':
+        return 'bg-orange-50 text-orange-600'
       default:
         return 'bg-gray-50 text-gray-600'
     }

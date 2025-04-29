@@ -3,7 +3,6 @@ import { Inter, Comfortaa } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from '@/components/Footer'
-import AnimatedLayout from '@/components/AnimatedLayout'
 
 const inter = Inter({ subsets: ["latin"] });
 const comfortaa = Comfortaa({ 
@@ -28,9 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navigation />
         <main className="min-h-screen">
-          <AnimatedLayout>
-            {children}
-          </AnimatedLayout>
+          {children}
         </main>
         <Footer />
       </body>
