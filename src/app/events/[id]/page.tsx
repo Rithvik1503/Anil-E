@@ -2,11 +2,12 @@ import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 
-export default async function EventPage({
-  params,
-}: {
+type Props = {
   params: { id: string }
-}) {
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export default async function EventPage({ params }: Props) {
   const { data: event, error } = await supabase
     .from('events')
     .select('*')
