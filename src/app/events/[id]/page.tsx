@@ -3,12 +3,12 @@ import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 
-interface PageProps {
+type Props = {
   params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: event } = await supabase
     .from('events')
     .select('title, description')
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function EventPage({ params }: PageProps) {
+export default async function EventPage({ params }: Props) {
   const { data: event, error } = await supabase
     .from('events')
     .select('*')
