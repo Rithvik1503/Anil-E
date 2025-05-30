@@ -2,11 +2,16 @@ import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 
-export default async function EventPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export default async function EventPage(props: PageProps) {
   const { data: event, error } = await supabase
     .from('events')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', props.params.id)
     .single()
 
   if (error || !event) {
