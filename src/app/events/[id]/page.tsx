@@ -1,8 +1,33 @@
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
 
-export default async function Page({ params }: { params: { id: string } }) {
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { data: event } = await supabase
+    .from('events')
+    .select('title, description')
+    .eq('id', params.id)
+    .single()
+
+  if (!event) {
+    return {
+      title: 'Event Not Found',
+    }
+  }
+
+  return {
+    title: event.title,
+    description: event.description,
+  }
+}
+
+export default async function Page({ params }: Props) {
   const { data: event, error } = await supabase
     .from('events')
     .select('*')
